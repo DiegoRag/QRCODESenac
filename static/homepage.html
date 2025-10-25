@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Controle de Material</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/homepage.css?v=20251024-4">
+
+  <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <!-- Removido pdf.min.js para evitar duplicidade; o JS importa o módulo pdf.mjs -->
+  <script type="module" src="/script.js"></script>
+</head>
+<body>
+  <div id="app-page">
+    <input type="file" id="pdf-file-input" hidden accept="application/pdf,image/*">
+    <div id="toast-container"></div>
+
+    <header>
+      <h1>Controle de Material</h1>
+      <div class="header-actions">
+        <button id="show-modal-btn" aria-haspopup="dialog" aria-controls="data-modal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          Criar Material
+        </button>
+        <button id="export-csv-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exportar
+        </button>
+        <button id="create-pdf-btn" aria-haspopup="dialog" aria-controls="pdf-extraction-modal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M10 12v-1h3v1"/><path d="M10 15h3"/><path d="M10 18h3"/></svg>
+          Extrair de PDF/Imagem
+        </button>
+        <button id="scan-qr-btn" aria-haspopup="dialog" aria-controls="scanner-modal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Escanear
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <h2>QR Codes Salvos</h2>
+      <div id="qr-code-container" class="qr-grid"></div>
+      <div id="empty-state-container" class="empty-state" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <h3>Nenhum material cadastrado</h3>
+        <p>Crie um novo material ou extraia de um PDF/Imagem para começar.</p>
+      </div>
+    </main>
+  </div>
+
+  <div id="data-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="data-modal-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="data-modal-title">Informações do Material</h3>
+        <button class="close-btn" aria-label="Fechar modal">&times;</button>
+      </div>
+      <form id="material-form"><!-- Campos gerados por JS --></form>
+    </div>
+  </div>
+
+  <div id="scanner-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="scanner-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="scanner-title">Escaneie um QR Code</h3>
+        <button class="close-btn" aria-label="Fechar modal">&times;</button>
+      </div>
+      <div id="scanner-container">
+        <div id="qr-reader"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="pdf-extraction-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="pdf-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="pdf-title">Extraindo Dados do Documento</h3>
+        <button class="close-btn" aria-label="Fechar modal">&times;</button>
+      </div>
+      <canvas id="pdf-preview-canvas" style="display: none;"></canvas>
+      <div id="pdf-processing-indicator">
+        <div class="spinner"></div>
+        <p id="pdf-processing-status">Analisando documento...</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirm-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+    <div class="modal-content">
+      <h3 id="confirm-modal-title">Confirmar Ação</h3>
+      <p id="confirm-modal-text">Você tem certeza?</p>
+      <div class="confirm-actions">
+        <button id="confirm-btn-no">Cancelar</button>
+        <button id="confirm-btn-yes">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
