@@ -1,59 +1,170 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Controle de Material</title>
 
+  <!-- Fontes do Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="/homepage.css?v=20251024-4">
-
+  <!-- Bibliotecas Externas -->
   <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode"></script>
 
-  <!-- JS do app como módulo; pdf.js é importado no próprio script -->
-  <script type="module" src="/script.js"></script>
-</head>
-<body>
-  <div id="app-page">
-    <input type="file" id="pdf-file-input" hidden accept="application/pdf,image/*">
-    <div id="toast-container"></div>
+  <!-- Arquivos do Projeto -->
+  <link rel="stylesheet" href="homepage.css">
+  <script type="module" src="homepage.js"></script>
 
-    <header>
-      <h1>Controle de Material</h1>
-      <div class="header-actions">
+</head>
+
+<body>
+
+  <div id="app-layout">
+
+    <nav id="sidebar">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+          </path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+        <span>Amemiya</span>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-group-title">Principal</span>
+        <a href="#" class="nav-item active" data-nav="materiais">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          Materiais
+        </a>
+        <a href="#" class="nav-item" data-nav="encerrados">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+            <polyline points="13 2 13 9 20 9"></polyline>
+          </svg>
+          Materiais Encerrados
+        </a>
+      </div>
+
+      <div class="action-group">
         <button id="show-modal-btn" aria-haspopup="dialog" aria-controls="data-modal">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" />
+            <path d="M12 5v14" />
+          </svg>
           Criar Material
         </button>
-        <button id="export-csv-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Exportar
-        </button>
         <button id="create-pdf-btn" aria-haspopup="dialog" aria-controls="pdf-extraction-modal">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M10 12v-1h3v1"/><path d="M10 15h3"/><path d="M10 18h3"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+            <polyline points="14 2 14 8 20 8" />
+            <path d="M10 12v-1h3v1" />
+            <path d="M10 15h3" />
+            <path d="M10 18h3" />
+          </svg>
           Extrair de PDF/Imagem
         </button>
         <button id="scan-qr-btn" aria-haspopup="dialog" aria-controls="scanner-modal">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
           Escanear
         </button>
+        <button id="export-csv-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Exportar
+        </button>
       </div>
-    </header>
+    </nav>
 
-    <main>
-      <h2>QR Codes Salvos</h2>
-      <div id="qr-code-container" class="qr-grid"></div>
-      <div id="empty-state-container" class="empty-state" style="display: none;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        <h3>Nenhum material cadastrado</h3>
-        <p>Crie um novo material ou extraia de um PDF/Imagem para começar.</p>
-      </div>
-    </main>
+    <div id="page-container">
+      <input type="file" id="pdf-file-input" hidden accept="application/pdf,image/*">
+      <div id="toast-container"></div>
+
+      <header>
+        <h1 id="page-title">Materiais</h1> <!-- Título da página -->
+      </header>
+
+      <main>
+        <!-- Container para as seções ativas, será ocultado na aba "Encerrados" -->
+        <div id="active-materials-container">
+          <section id="finalizado-section" class="qr-section">
+            <h2><span class="status-dot status-finalizado"></span>Materiais Finalizados</h2>
+            <div id="qr-code-container-finalizado" class="qr-grid"></div>
+            <div id="empty-state-finalizado" class="empty-state" style="display: none;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <h3>Nenhum material finalizado</h3>
+              <p>Autorize um item pendente para movê-lo para esta seção.</p>
+            </div>
+          </section>
+
+          <section id="pendente-section" class="qr-section">
+            <h2><span class="status-dot status-pendente"></span>Materiais Pendentes</h2>
+            <div id="qr-code-container-pendente" class="qr-grid"></div>
+            <div id="empty-state-pendente" class="empty-state" style="display: none;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <h3>Nenhum material pendente</h3>
+              <p>Crie um novo material ou extraia de um PDF/Imagem para começar.</p>
+            </div>
+          </section>
+        </div>
+
+        <!-- Container para a seção de encerrados, ficará oculto por padrão -->
+        <div id="archived-materials-container" style="display: none;">
+          <section id="encerrado-section" class="qr-section">
+            <h2><span class="status-dot status-encerrado"></span>Materiais Encerrados (Histórico)</h2>
+            <div id="qr-code-container-encerrado" class="qr-grid"></div>
+            <div id="empty-state-encerrado" class="empty-state" style="display: none;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                <polyline points="13 2 13 9 20 9"></polyline>
+              </svg>
+              <h3>Nenhum material encerrado</h3>
+              <p>Ao excluir um material finalizado, ele será movido para cá.</p>
+            </div>
+          </section>
+        </div>
+
+      </main>
+    </div>
+
   </div>
+
 
   <div id="data-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="data-modal-title">
     <div class="modal-content">
@@ -101,5 +212,7 @@
       </div>
     </div>
   </div>
+
 </body>
+
 </html>
