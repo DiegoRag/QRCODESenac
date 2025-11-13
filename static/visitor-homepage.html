@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Controle de Material</title>
+    <title>Controle de Material (Visitante)</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
     <script src="https://unpkg.com/html5-qrcode"></script>
 
     <link rel="stylesheet" href="homepage.css">
-    <script type="module" src="homepage.js"></script>
+    <script type="module" src="visitor-homepage.js"></script> 
 
 </head>
 
@@ -58,34 +58,13 @@
             </div>
 
             <div class="action-group">
-                <button id="show-modal-btn" aria-haspopup="dialog" aria-controls="data-modal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14" />
-                        <path d="M12 5v14" />
-                    </svg>
-                    Criar Material
-                </button>
-                <button id="create-pdf-btn" aria-haspopup="dialog" aria-controls="pdf-extraction-modal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                        <polyline points="14 2 14 8 20 8" />
-                        <path d="M10 12v-1h3v1" />
-                        <path d="M10 15h3" />
-                        <path d="M10 18h3" />
-                    </svg>
-                    Extrair de PDF/Imagem
-                </button>
                 <button id="scan-qr-btn" aria-haspopup="dialog" aria-controls="scanner-modal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="3" width="7" height="7"></rect>
-                        <rect x="14" y="3" width="7" height="7"></rect>
-                        <rect x="14" y="14" width="7" height="7"></rect>
-                        <rect x="3" y="14" width="7" height="7" />
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
                     </svg>
-                    Escanear
+                    Escanear QR Code
                 </button>
                 <button id="export-csv-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -100,99 +79,71 @@
         </nav>
 
         <div id="page-container">
-            <input type="file" id="pdf-file-input" hidden accept="application/pdf,image/*">
             <div id="toast-container"></div>
-
             <header>
-                <h1 id="page-title">Materiais</h1> </header>
-
+                <h1 id="page-title">Materiais</h1>
+            </header>
             <main>
                 <div id="active-materials-container">
-                    <section id="finalizado-section" class="qr-section">
-                        <h2><span class="status-dot status-finalizado"></span>Materiais Finalizados</h2>
-                        <div id="qr-code-container-finalizado" class="qr-grid"></div>
-                        <div id="empty-state-finalizado" class="empty-state" style="display: none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                            <h3>Nenhum material finalizado</h3>
-                            <p>Autorize um item pendente para movê-lo para esta seção.</p>
-                        </div>
-                    </section>
-
                     <section id="pendente-section" class="qr-section">
                         <h2><span class="status-dot status-pendente"></span>Materiais Pendentes</h2>
                         <div id="qr-code-container-pendente" class="qr-grid"></div>
                         <div id="empty-state-pendente" class="empty-state" style="display: none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                <polyline points="7 10 12 15 17 10" />
-                                <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                             <h3>Nenhum material pendente</h3>
-                            <p>Crie um novo material ou extraia de um PDF/Imagem para começar.</p>
+                            <p>Todos os materiais recebidos já foram revisados.</p>
+                        </div>
+                    </section>
+                    <section id="finalizado-section" class="qr-section">
+                        <h2><span class="status-dot status-finalizado"></span>Materiais Finalizados</h2>
+                        <div id="qr-code-container-finalizado" class="qr-grid"></div>
+                        <div id="empty-state-finalizado" class="empty-state" style="display: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <h3>Nenhum material finalizado</h3>
+                            <p>Autorize materiais pendentes para vê-los aqui.</p>
                         </div>
                     </section>
                 </div>
-
+                
                 <div id="archived-materials-container" style="display: none;">
                     <section id="encerrado-section" class="qr-section">
-                        <h2><span class="status-dot status-encerrado"></span>Materiais Encerrados (Histórico)</h2>
+                        <h2><span class="status-dot status-encerrado"></span>Materiais Encerrados</h2>
                         <div id="qr-code-container-encerrado" class="qr-grid"></div>
                         <div id="empty-state-encerrado" class="empty-state" style="display: none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
                                 <polyline points="13 2 13 9 20 9"></polyline>
                             </svg>
                             <h3>Nenhum material encerrado</h3>
-                            <p>Ao excluir um material finalizado, ele será movido para cá.</p>
+                            <p>Materiais movidos para encerrados aparecerão aqui.</p>
                         </div>
                     </section>
                 </div>
-
             </main>
         </div>
-
     </div>
 
-
-    <div id="data-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="data-modal-title">
+    <div id="material-details-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="material-details-title">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="data-modal-title">Informações do Material</h3>
+                <h3 id="material-details-title">Detalhes do Material</h3>
                 <button class="close-btn" aria-label="Fechar modal">&times;</button>
             </div>
-            <form id="material-form"></form>
+            <div class="modal-body form-grid" id="material-details-content">
+                </div>
         </div>
     </div>
-
-    <div id="scanner-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="scanner-title">
+    <div id="scanner-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="scanner-modal-title">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="scanner-title">Escaneie um QR Code</h3>
+                <h3 id="scanner-modal-title">Escanear QR Code</h3>
                 <button class="close-btn" aria-label="Fechar modal">&times;</button>
             </div>
-            <div id="scanner-container">
-                <div id="qr-reader"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="pdf-extraction-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="pdf-title">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="pdf-title">Extraindo Dados do Documento</h3>
-                <button class="close-btn" aria-label="Fechar modal">&times;</button>
-            </div>
-            <canvas id="pdf-preview-canvas" style="display: none;"></canvas>
-            <div id="pdf-processing-indicator">
-                <div class="spinner"></div>
-                <p id="pdf-processing-status">Analisando documento...</p>
-            </div>
+            <div id="qr-reader" style="width: 100%;"></div>
+            <p id="qr-reader-status" style="text-align: center; margin-top: 1rem;">Aguardando câmera...</p>
         </div>
     </div>
 
@@ -217,8 +168,7 @@
                 </div>
         </div>
     </div>
-    <div id="qr-reader-result-text" class="scan-result-info" style="display: none;"></div>
-    
+    <div id="qr-reader-result-text" class="scan-result-text"></div>
 </body>
 
 </html>

@@ -269,6 +269,9 @@ function initializeApp() {
   const openModal = (modal) => {
     modal.style.display = 'block';
     focusFirstInput(modal);
+    // Limpa o resultado do scanner ao abrir a modal
+    const resultTextEl = document.getElementById('qr-reader-result-text');
+    if (resultTextEl) resultTextEl.style.display = 'none';
   };
   const closeModal = (modal) => {
     modal.style.display = 'none';
@@ -547,10 +550,15 @@ function initializeApp() {
     }
   };
 
+  // >>> INÍCIO DA FUNÇÃO startScanner MODIFICADA <<<
   const startScanner = () => {
     if (isScannerRunning) return;
     const config = { fps: 15, qrbox: { width: 280, height: 280 } };
     isScannerRunning = true;
+
+    // Elemento para mostrar o resultado da localização na modal (deve ser adicionado no HTML)
+    const resultTextEl = document.getElementById('qr-reader-result-text');
+    if (resultTextEl) resultTextEl.style.display = 'none'; // Garante que está escondido ao iniciar
 
     html5QrCode.start({ facingMode: "environment" }, config, async (decodedText) => {
       const qrReaderEl = document.getElementById('qr-reader');
@@ -559,17 +567,57 @@ function initializeApp() {
       await stopScanner();
 
       setTimeout(() => {
-        const materials = getMaterials();
-        const materialData = materials.find(m => m.id === decodedText);
+        
+        // --- NOVO TRATAMENTO DE QR CODE ---
+        // Regex para o formato A1-101/5 (Coluna/Linha-Numeração/Nível)
+        const locationRegex = /^([A-Z]\d+)-(\d+)\/(\d+)$/i; 
 
-        if (materialData) {
-          showToast(`QR Code lido: ${materialData.denominacao}`, 'success');
-          closeModal(scannerModal);
-          showMaterialDetails(materialData); // Abre os detalhes para todos os status
+        if (locationRegex.test(decodedText)) {
+          // É um QR Code de Localização/Gaveta
+          const match = decodedText.match(locationRegex);
+          // O primeiro grupo de captura é 'A1', o segundo é '101', o terceiro é '5'
+          const [_, colunaElinha, numeracao, nivel] = match;
+
+          // Assumindo que o primeiro caractere de 'colunaElinha' é a Coluna e o restante é a Linha
+          const coluna = colunaElinha.substring(0, 1).toUpperCase();
+          const linha = colunaElinha.substring(1);
+          
+          const infoText = `
+            Localização lida: **${decodedText}**
+            - **Coluna**: ${coluna}
+            - **Numeração (Linha)**: ${linha}
+            - **Número do Nível**: ${nivel}
+          `;
+          
+          // Exibe o texto na própria modal do scanner
+          if (resultTextEl) {
+            resultTextEl.innerHTML = infoText.replace(/\n/g, '<br>'); // Converte quebras de linha para HTML
+            resultTextEl.style.display = 'block';
+          }
+          showToast(`Localização de Gaveta lida: ${decodedText}`, 'info');
+
+          // Fecha a mensagem após 5 segundos e reabre o scanner
+          setTimeout(() => {
+            if (resultTextEl) resultTextEl.style.display = 'none';
+            // Chama startScanner novamente para o usuário escanear o próximo código
+            startScanner(); 
+          }, 5000);
+
         } else {
-          showToast("Material não encontrado.", "error");
-          closeModal(scannerModal);
+          // É um QR Code de Material (lógica original)
+          const materials = getMaterials();
+          const materialData = materials.find(m => m.id === decodedText);
+
+          if (materialData) {
+            showToast(`QR Code lido: ${materialData.denominacao}`, 'success');
+            closeModal(scannerModal);
+            showMaterialDetails(materialData); 
+          } else {
+            showToast("Material/Localização não encontrado(a).", "error");
+            closeModal(scannerModal);
+          }
         }
+        // --- FIM NOVO TRATAMENTO ---
 
         qrReaderEl.classList.remove('scan-success');
       }, 400);
@@ -581,6 +629,7 @@ function initializeApp() {
       closeModal(scannerModal);
     });
   };
+  // >>> FIM DA FUNÇÃO startScanner MODIFICADA <<<
 
   // Export CSV
   exportCsvBtn.addEventListener('click', () => {
