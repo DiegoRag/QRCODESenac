@@ -10,7 +10,6 @@
   --info-color: #3b82f6;
   /* --- Cor de Encerrado --- */
   --encerrado-color: #9ca3af;
-  /* Cinza */
 
   /* --- TEMA CLARO --- */
   --sidebar-bg: #ffffff;
@@ -280,7 +279,6 @@ main {
 /* Itens encerrados têm aparência desabilitada, mas ainda são clicáveis */
 .qr-item.encerrado {
   background-color: #f9fafb;
-  /* Fundo mais acinzentado */
   opacity: 0.8;
 }
 
@@ -302,9 +300,6 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.qr-code-img {
   background: #fff;
   padding: 10px;
   border-radius: 0.25rem;
@@ -375,6 +370,8 @@ main {
 .delete-btn svg {
   color: var(--danger-color);
 }
+
+/* ---------- MODAIS ---------- */
 
 .modal {
   display: none;
@@ -451,6 +448,8 @@ main {
   color: var(--text-color);
 }
 
+/* ---------- FORMULÁRIO ---------- */
+
 #material-form {
   padding: 2rem;
 }
@@ -465,6 +464,7 @@ main {
 .form-group {
   flex: 1;
   min-width: 200px;
+  position: relative;
 }
 
 .form-group:last-child {
@@ -525,6 +525,8 @@ form button[type="submit"]:hover {
   background-color: var(--success-hover);
 }
 
+/* ---------- MODAL PDF ---------- */
+
 #pdf-extraction-modal .modal-content {
   max-width: 800px;
   text-align: center;
@@ -561,6 +563,8 @@ form button[type="submit"]:hover {
   }
 }
 
+/* ---------- EMPTY STATE ---------- */
+
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
@@ -586,6 +590,8 @@ form button[type="submit"]:hover {
   color: var(--text-light);
   margin: 0;
 }
+
+/* ---------- TOASTS ---------- */
 
 #toast-container {
   position: fixed;
@@ -659,6 +665,8 @@ form button[type="submit"]:hover {
   color: var(--info-color);
 }
 
+/* ---------- CONFIRM MODAL ---------- */
+
 #confirm-modal .modal-content {
   max-width: 400px;
   padding: 2rem;
@@ -707,6 +715,8 @@ form button[type="submit"]:hover {
   color: var(--text-color);
 }
 
+/* ---------- SCANNER ---------- */
+
 #scanner-modal .modal-content {
   max-width: 420px;
 }
@@ -716,6 +726,7 @@ form button[type="submit"]:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 #qr-reader {
@@ -740,7 +751,13 @@ form button[type="submit"]:hover {
   z-index: 1;
   pointer-events: none;
   border: 40px solid transparent;
-  border-image: conic-gradient(from 0deg, var(--primary-color) 90deg, transparent 90deg, transparent 180deg, var(--primary-color) 180deg, var(--primary-color) 270deg, transparent 270deg) 40;
+  border-image: conic-gradient(from 0deg,
+      var(--primary-color) 90deg,
+      transparent 90deg,
+      transparent 180deg,
+      var(--primary-color) 180deg,
+      var(--primary-color) 270deg,
+      transparent 270deg) 40;
   transition: border-image .3s ease;
 }
 
@@ -771,11 +788,32 @@ form button[type="submit"]:hover {
 }
 
 #qr-reader.scan-success::after {
-  border-image: conic-gradient(from 0deg, var(--success-color) 90deg, transparent 90deg, transparent 180deg, var(--success-color) 180deg, var(--success-color) 270deg, transparent 270deg) 40;
+  border-image: conic-gradient(from 0deg,
+      var(--success-color) 90deg,
+      transparent 90deg,
+      transparent 180deg,
+      var(--success-color) 180deg,
+      var(--success-color) 270deg,
+      transparent 270deg) 40;
 }
 
 #qr-reader.scan-success::before {
   display: none;
+}
+
+/* Exemplo de estilo para o resultado do QR Code de localização */
+.scan-result-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(30, 41, 59, 0.9);
+  color: white;
+  padding: 15px;
+  z-index: 10;
+  font-size: 16px;
+  white-space: pre-wrap;
+  text-align: left;
 }
 
 /* Campos inválidos */
@@ -783,56 +821,76 @@ form button[type="submit"]:hover {
   border-color: #dc2626 !important;
   box-shadow: 0 0 0 3px rgba(220, 38, 38, .15) !important;
 }
-/* Estilo Básico para o novo modal */
+
+/* ---------- QR DETAILS MODAL ---------- */
+
 #qr-details-modal .modal-content {
-    max-width: 400px; /* Mantém um tamanho compacto */
-    padding: 30px;
+  max-width: 400px;
+  padding: 30px;
 }
 
 #qr-details-modal .modal-header h3 {
-    color: #3b82f6; /* Cor primária */
+  color: #3b82f6;
 }
 
 #qr-details-content h3 {
-    text-align: center;
-    color: #16a34a; /* Cor de sucesso */
-    margin-bottom: 20px;
-    font-size: 1.4em;
+  text-align: center;
+  color: #16a34a;
+  margin-bottom: 20px;
+  font-size: 1.4em;
 }
 
 #qr-details-content p {
-    margin: 8px 0;
-    line-height: 1.5;
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
+  margin: 8px 0;
+  line-height: 1.5;
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
 }
 
 #qr-details-content p:nth-child(even) {
-    background-color: #f7f7f7; /* Listras para melhor leitura */
+  background-color: #f7f7f7;
 }
 
 #qr-details-content strong {
-    color: #1e293b;
-    font-weight: 600;
+  color: #1e293b;
+  font-weight: 600;
 }
 
 #qr-details-content hr {
-    border: 0;
-    border-top: 1px solid #ddd;
-    margin: 15px 0;
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 15px 0;
 }
-/* Exemplo de estilo para o resultado do QR Code de localização */
-.scan-result-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(30, 41, 59, 0.9); /* #1e293b com transparência */
-    color: white;
-    padding: 15px;
-    z-index: 10;
-    font-size: 16px;
-    white-space: pre-wrap;
-    text-align: left;
+
+/* ---------- AUTOCOMPLETE ---------- */
+
+#autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1010;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 .375rem .375rem;
+  box-shadow: var(--shadow-lg);
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.autocomplete-item {
+  padding: .75rem 1rem;
+  cursor: pointer;
+  transition: background-color .2s;
+  font-size: .875rem;
+}
+
+.autocomplete-item:hover {
+  background-color: #eef2ff;
+}
+
+.autocomplete-item strong {
+  color: var(--primary-color);
 }
