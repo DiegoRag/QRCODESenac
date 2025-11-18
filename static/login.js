@@ -83,7 +83,16 @@ async function handleSubmit(e) {
       localStorage.setItem("userType", js.userType || (username === "admin" ? "admin" : "visitor"));
       if (remember) localStorage.setItem("rememberUser", username);
       else localStorage.removeItem("rememberUser");
-      location.href = "/home";
+const userType = js.userType || (username === "admin" ? "admin" : "visitor");
+
+if (userType === "admin") {
+    // redireciona o admin para a página atual de admin
+    location.href = "/home";
+} else {
+    // redireciona o visitante para sua homepage
+    location.href = "/visitor-homepage.html";
+}
+
     } else {
       if (errorEl) {
         errorEl.textContent = js.error || js.msg || "Usuário ou senha incorretos.";
