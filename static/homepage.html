@@ -108,21 +108,10 @@
       </header>
 
       <main>
-        <div id="active-materials-container">
-          <section id="finalizado-section" class="qr-section">
-            <h2><span class="status-dot status-finalizado"></span>Materiais Finalizados</h2>
-            <div id="qr-code-container-finalizado" class="qr-grid"></div>
-            <div id="empty-state-finalizado" class="empty-state" style="display: none;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-              </svg>
-              <h3>Nenhum material finalizado</h3>
-              <p>Autorize um item pendente para movê-lo para esta seção.</p>
-            </div>
-          </section>
 
+
+
+        <div id="active-materials-container">
           <section id="pendente-section" class="qr-section">
             <h2><span class="status-dot status-pendente"></span>Materiais Pendentes</h2>
             <div id="qr-code-container-pendente" class="qr-grid"></div>
@@ -137,6 +126,24 @@
               <p>Crie um novo material ou extraia de um PDF/Imagem para começar.</p>
             </div>
           </section>
+
+
+
+          <section id="finalizado-section" class="qr-section">
+            <h2><span class="status-dot status-finalizado"></span>Materiais Finalizados</h2>
+            <div id="qr-code-container-finalizado" class="qr-grid"></div>
+            <div id="empty-state-finalizado" class="empty-state" style="display: none;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <h3>Nenhum material finalizado</h3>
+              <p>Autorize um item pendente para movê-lo para esta seção.</p>
+            </div>
+          </section>
+
+          
         </div>
 
         <div id="archived-materials-container" style="display: none;">

@@ -138,12 +138,18 @@ function initializeApp() {
       qrItem.className = 'qr-item';
       qrItem.dataset.id = material.id;
       qrItem.style.animationDelay = `${index * 50}ms`;
+      // Adiciona estilo para garantir contraste visual no card se necessário
+      qrItem.style.backgroundColor = '#1e293b'; // Fundo do card escuro para combinar
 
       const qrCodeImgDiv = document.createElement('div');
       qrCodeImgDiv.className = 'qr-code-img';
+      // Ajuste de padding se necessário para o QR code não colar na borda
+      qrCodeImgDiv.style.padding = '10px';
+      qrCodeImgDiv.style.backgroundColor = '#000000'; // Fundo preto para o container da imagem
 
       const denomination = document.createElement('p');
       denomination.textContent = material.denominacao;
+      denomination.style.color = '#ffffff'; // Texto branco
 
       const actionsDiv = document.createElement('div');
       actionsDiv.className = 'actions';
@@ -168,7 +174,17 @@ function initializeApp() {
       qrItem.addEventListener('click', () => showMaterialDetails(material));
       qrCodeContainer.appendChild(qrItem);
 
-      new QRCode(qrCodeImgDiv, { text: material.id, width: 150, height: 150, colorDark: "#1e293b", colorLight: "#ffffff" });
+      // --- MODIFICAÇÃO DE CORES AQUI ---
+      // colorDark: Cor dos "quadrados" (agora Branco)
+      // colorLight: Cor do fundo (agora Preto)
+      new QRCode(qrCodeImgDiv, { 
+          text: material.id, 
+          width: 150, 
+          height: 150, 
+          colorDark: "#ffffff", 
+          colorLight: "#000000",
+          correctLevel : QRCode.CorrectLevel.H
+      });
     });
   };
 
@@ -282,7 +298,14 @@ function initializeApp() {
   const showMaterialDetails = (material) => editMaterial(material.id);
 
   // Scanner
-  const html5QrCode = new Html5Qrcode("qr-reader");
+  // --- MODIFICAÇÃO PARA LEITURA: Adicionado suporte experimental a BarCodeDetector ---
+  // Isso ajuda significativamente na leitura de QR Codes invertidos (branco no preto)
+  const html5QrCode = new Html5Qrcode("qr-reader", { 
+    experimentalFeatures: { 
+        useBarCodeDetectorIfSupported: true 
+    } 
+  });
+  
   let isScannerRunning = false;
 
   const stopScanner = async () => {
@@ -473,12 +496,8 @@ function initializeApp() {
     statusEl.textContent = 'Preparando documento para análise...';
     const base64Data = await fileToBase64(file);
 
-    // --- CORREÇÃO ---
-    // A API key deve ser "" (vazia) para que o ambiente forneça a chave.
     const apiKey = "AIzaSyAUUVIiAus6e0xmK_eAF-tnuFqZsn250BU"; 
-    // Usando o modelo flash mais recente recomendado para esta tarefa.
     const model = "gemini-2.5-flash-preview-09-2025";
-    // --- FIM DA CORREÇÃO ---
     
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
@@ -566,9 +585,7 @@ function initializeApp() {
     document.getElementById('edit-id').value = '';
 
     Object.keys(suggestions).forEach(key => {
-      // O 'key' aqui é o que vem do JSON da IA (ex: 'cnpjEntregador')
       const camelCaseKey = key;
-      // Converte camelCase para kebab-case (ex: 'cnpjEntregador' -> 'cnpj-entregador')
       const kebabKey = camelCaseKey.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
       
       const el = document.getElementById(kebabKey);
@@ -578,7 +595,6 @@ function initializeApp() {
       }
     });
 
-    // Marca obrigatórios vazios
     document.querySelectorAll('[required]').forEach(el=>{
       if (!el.value.trim()) el.classList.add('invalid'); else el.classList.remove('invalid');
     });
